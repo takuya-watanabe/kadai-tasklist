@@ -1,11 +1,10 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   before_action :require_user_logged_in
+  before_action :correct_user, except: [:index, :new, :create]
   
   def index
-    if logged_in?
-      @tasks = current_user.tasks
-    end  
+    @tasks = current_user.tasks
   end
 
   def show
@@ -54,7 +53,7 @@ class TasksController < ApplicationController
   end
   
   def task_params
-    params.require(:task).permit(:content, :status)
+    params.require(:task).permit(:content, :status, :user_id)
   end
   
   def correct_user
